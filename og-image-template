@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OG Image Template Maker - webdevsam.io</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: #0a0a0a;
+      padding: 20px;
+      gap: 20px;
+    }
+    
+    .og-container {
+      width: 1200px;
+      height: 630px;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      border-radius: 0;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    }
+    
+    /* Grid pattern matching style.css */
+    .og-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: 
+        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+      background-size: 50px 50px;
+      pointer-events: none;
+      z-index: 1;
+    }
+    
+    .og-content {
+      position: relative;
+      z-index: 1;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 80px;
+      color: white;
+    }
+    
+    .og-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(10px);
+      padding: 12px 24px;
+      border-radius: 50px;
+      font-size: 18px;
+      font-weight: 500;
+      margin-bottom: 30px;
+      width: fit-content;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+    
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      background: #4ade80;
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    
+    .og-title {
+      font-size: 96px;
+      font-weight: 900;
+      margin-bottom: 20px;
+      line-height: 1;
+      text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      letter-spacing: -2px;
+    }
+    
+    .og-subtitle {
+      font-size: 42px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      opacity: 0.95;
+      letter-spacing: -0.5px;
+    }
+    
+    .og-description {
+      font-size: 24px;
+      opacity: 0.85;
+      max-width: 800px;
+      line-height: 1.4;
+      font-weight: 400;
+    }
+    
+    .og-footer {
+      position: absolute;
+      bottom: 60px;
+      left: 80px;
+      right: 80px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .og-url {
+      font-size: 28px;
+      font-weight: 600;
+      opacity: 0.5;
+      color: white;
+    }
+    
+    .og-logo {
+      width: 80px;
+      height: 80px;
+      background: white;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+      font-weight: 900;
+      color: #1a1a2e;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      overflow: hidden;
+    }
+    
+    .og-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    /* Control Panel */
+    .control-panel {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+      max-width: 1200px;
+      width: 100%;
+      color: #333;
+      backdrop-filter: blur(10px);
+    }
+    
+    .control-panel h3 {
+      margin-bottom: 20px;
+      color: #1a1a2e;
+      font-size: 24px;
+    }
+    
+    .control-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+    
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    
+    .control-group label {
+      font-weight: 600;
+      font-size: 14px;
+      color: #555;
+    }
+    
+    .control-group input,
+    .control-group textarea {
+      padding: 10px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 14px;
+      font-family: inherit;
+      transition: border-color 0.3s;
+    }
+    
+    .control-group input:focus,
+    .control-group textarea:focus {
+      outline: none;
+      border-color: #1a1a2e;
+    }
+    
+    .control-group textarea {
+      resize: vertical;
+      min-height: 60px;
+    }
+    
+    .color-inputs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+    
+    .color-input-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    
+    .color-input-wrapper label {
+      font-size: 12px;
+      color: #666;
+    }
+    
+    .color-input-wrapper input[type="color"] {
+      width: 100%;
+      height: 40px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    
+    .button-group {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    
+    button {
+      padding: 12px 24px;
+      background: #1a1a2e;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 14px;
+      transition: all 0.3s;
+    }
+    
+    button:hover {
+      background: #16213e;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    
+    button.secondary {
+      background: #e0e0e0;
+      color: #333;
+    }
+    
+    button.secondary:hover {
+      background: #d0d0d0;
+    }
+    
+    .file-upload {
+      position: relative;
+      overflow: hidden;
+      display: inline-block;
+    }
+    
+    .file-upload input[type="file"] {
+      position: absolute;
+      left: -9999px;
+    }
+    
+    .file-upload label {
+      padding: 12px 24px;
+      background: #0f3460;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      display: inline-block;
+      transition: all 0.3s;
+    }
+    
+    .file-upload label:hover {
+      background: #16213e;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    
+    .instructions {
+      background: #f8f9fa;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 20px;
+      border-left: 4px solid #1a1a2e;
+    }
+    
+    .instructions h4 {
+      margin-bottom: 10px;
+      color: #1a1a2e;
+    }
+    
+    .instructions ol {
+      margin-left: 20px;
+      line-height: 1.8;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Control Panel -->
+  <div class="control-panel">
+    <h3>🎨 OG Image Customizer</h3>
+    
+    <div class="control-grid">
+      <!-- Text Inputs -->
+      <div class="control-group">
+        <label for="badge-text">Badge Text</label>
+        <input type="text" id="badge-text" value="Available for Projects" oninput="updateBadge()">
+      </div>
+      
+      <div class="control-group">
+        <label for="main-title">Main Title</label>
+        <input type="text" id="main-title" value="Sam" oninput="updateTitle()">
+      </div>
+      
+      <div class="control-group">
+        <label for="subtitle">Subtitle</label>
+        <input type="text" id="subtitle" value="Web Developer & Designer" oninput="updateSubtitle()">
+      </div>
+      
+      <div class="control-group">
+        <label for="url-text">Website URL</label>
+        <input type="text" id="url-text" value="webdevsam.io" oninput="updateUrl()">
+      </div>
+      
+      <div class="control-group">
+        <label for="logo-text">Logo Letter</label>
+        <input type="text" id="logo-text" value="S" maxlength="2" oninput="updateLogoText()">
+      </div>
+    </div>
+    
+    <div class="control-group">
+      <label for="description">Description</label>
+      <textarea id="description" oninput="updateDescription()">Crafting exceptional digital experiences with modern web technologies. Specialized in Vue.js, Alpine.js, and cutting-edge frontend development.</textarea>
+    </div>
+    
+    <!-- Color Controls -->
+    <div class="control-group" style="margin-top: 20px;">
+      <label>Gradient Colors</label>
+      <div class="color-inputs">
+        <div class="color-input-wrapper">
+          <label>Start Color</label>
+          <input type="color" id="color1" value="#1a1a2e" oninput="updateGradient()">
+        </div>
+        <div class="color-input-wrapper">
+          <label>Middle Color</label>
+          <input type="color" id="color2" value="#16213e" oninput="updateGradient()">
+        </div>
+        <div class="color-input-wrapper">
+          <label>End Color</label>
+          <input type="color" id="color3" value="#0f3460" oninput="updateGradient()">
+        </div>
+      </div>
+    </div>
+    
+    <!-- Logo Upload -->
+    <div class="control-group" style="margin-top: 20px;">
+      <label>Logo Image (Optional)</label>
+      <div class="button-group">
+        <div class="file-upload">
+          <input type="file" id="logo-upload" accept="image/*" onchange="uploadLogo()">
+          <label for="logo-upload">📁 Upload Logo Image</label>
+        </div>
+        <button class="secondary" onclick="resetLogo()">Reset to Letter</button>
+      </div>
+    </div>
+    
+    <!-- Action Buttons -->
+    <div class="button-group" style="margin-top: 20px;">
+      <button onclick="resetToDefaults()">🔄 Reset to Defaults</button>
+      <button class="secondary" onclick="toggleBadge()">👁️ Toggle Badge</button>
+    </div>
+    
+    <!-- Instructions -->
+    <div class="instructions">
+      <h4>📸 How to Create Your OG Image</h4>
+      <ol>
+        <li>Customize the text, colors, and logo above</li>
+        <li>Take a screenshot of the preview below (1200x630px)</li>
+        <li>Save as <code>og-image.jpg</code></li>
+        <li>Place in <code>assets/images/</code> folder</li>
+        <li>Optimize the image (compress to under 300KB)</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- OG Image Preview (1200x630px) -->
+  <div class="og-container" id="og-preview">
+    <div class="og-content">
+      <div class="og-badge" id="badge">
+        <span class="status-dot"></span>
+        <span id="badge-text-display">Available for Projects</span>
+      </div>
+      
+      <h1 class="og-title" id="title-display">Sam</h1>
+      <h2 class="og-subtitle" id="subtitle-display">Web Developer & Designer</h2>
+      <p class="og-description" id="description-display">
+        Crafting exceptional digital experiences with modern web technologies. 
+        Specialized in Vue.js, Alpine.js, and cutting-edge frontend development.
+      </p>
+    </div>
+    
+    <div class="og-footer">
+      <div class="og-url" id="url-display">webdevsam.io</div>
+      <div class="og-logo" id="logo-display">S</div>
+    </div>
+  </div>
+
+  <script>
+    // Update functions
+    function updateBadge() {
+      document.getElementById('badge-text-display').textContent = document.getElementById('badge-text').value;
+    }
+    
+    function updateTitle() {
+      document.getElementById('title-display').textContent = document.getElementById('main-title').value;
+    }
+    
+    function updateSubtitle() {
+      document.getElementById('subtitle-display').textContent = document.getElementById('subtitle').value;
+    }
+    
+    function updateDescription() {
+      document.getElementById('description-display').textContent = document.getElementById('description').value;
+    }
+    
+    function updateUrl() {
+      document.getElementById('url-display').textContent = document.getElementById('url-text').value;
+    }
+    
+    function updateLogoText() {
+      const logoDisplay = document.getElementById('logo-display');
+      if (!logoDisplay.querySelector('img')) {
+        logoDisplay.textContent = document.getElementById('logo-text').value;
+      }
+    }
+    
+    function updateGradient() {
+      const color1 = document.getElementById('color1').value;
+      const color2 = document.getElementById('color2').value;
+      const color3 = document.getElementById('color3').value;
+      document.getElementById('og-preview').style.background = 
+        `linear-gradient(135deg, ${color1} 0%, ${color2} 50%, ${color3} 100%)`;
+    }
+    
+    function uploadLogo() {
+      const file = document.getElementById('logo-upload').files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const logoDisplay = document.getElementById('logo-display');
+          logoDisplay.innerHTML = `<img src="${e.target.result}" alt="Logo">`;
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+    
+    function resetLogo() {
+      const logoDisplay = document.getElementById('logo-display');
+      logoDisplay.innerHTML = document.getElementById('logo-text').value;
+      document.getElementById('logo-upload').value = '';
+    }
+    
+    function toggleBadge() {
+      const badge = document.getElementById('badge');
+      badge.style.display = badge.style.display === 'none' ? 'inline-flex' : 'none';
+    }
+    
+    function resetToDefaults() {
+      // Reset text inputs
+      document.getElementById('badge-text').value = 'Available for Projects';
+      document.getElementById('main-title').value = 'Sam';
+      document.getElementById('subtitle').value = 'Web Developer & Designer';
+      document.getElementById('description').value = 'Crafting exceptional digital experiences with modern web technologies. Specialized in Vue.js, Alpine.js, and cutting-edge frontend development.';
+      document.getElementById('url-text').value = 'webdevsam.io';
+      document.getElementById('logo-text').value = 'S';
+      
+      // Reset colors
+      document.getElementById('color1').value = '#1a1a2e';
+      document.getElementById('color2').value = '#16213e';
+      document.getElementById('color3').value = '#0f3460';
+      
+      // Update display
+      updateBadge();
+      updateTitle();
+      updateSubtitle();
+      updateDescription();
+      updateUrl();
+      updateGradient();
+      resetLogo();
+      
+      // Show badge if hidden
+      document.getElementById('badge').style.display = 'inline-flex';
+    }
+  </script>
+</body>
+</html>
