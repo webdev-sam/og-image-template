@@ -26,7 +26,7 @@ A simple, editable template for generating Open Graph (OG) images with the corre
 
 ## 📸 Example Output
 
-![Example OG Image](./example.png)
+![Example OG Image](./og-image.jpg)
 
 ## 📄 License
 
